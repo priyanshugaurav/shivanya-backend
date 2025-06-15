@@ -6,7 +6,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 const app = express();
 const PORT = 5000;
 
-const uri = "mongodb+srv://shivanya:shivanya@cluster0.jmo3kn5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://shivanya:shivanya@cluster0.jmo3kn5.mongodb.net/shivanya?retryWrites=true&w=majority";
 const client = new MongoClient(uri);
 let db;
 
