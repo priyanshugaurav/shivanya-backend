@@ -17,9 +17,15 @@ async function connectDB() {
   try {
     await client.connect();
     db = client.db('shivanya'); // your DB name
-    console.log('Connected to MongoDB Atlas');
+    console.log('✅ Connected to MongoDB Atlas');
+
+    // 🚀 Start the server **after** DB is connected
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+
   } catch (err) {
-    console.error('MongoDB connection error:', err);
+    console.error('❌ MongoDB connection error:', err);
   }
 }
 
@@ -632,12 +638,3 @@ app.get('/settings/model/:name', async (req, res) => {
 //     res.sendFile(path.join(buildPath, 'index.html'));
 //   });
 // }
-
-
-
-
-
-
-app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
-});
