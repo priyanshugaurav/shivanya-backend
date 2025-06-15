@@ -9,6 +9,7 @@ const app = express();
 const PORT = 5000;
 
 const uri = process.env.MONGO_URI;
+console.log(uri)
 const client = new MongoClient(uri);
 let db;
 
