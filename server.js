@@ -14,22 +14,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 async function connectDB() {
-  try {
-    await client.connect();
-    db = client.db('shivanya'); // your DB name
-    console.log('✅ Connected to MongoDB Atlas');
-
-    // 🚀 Start the server **after** DB is connected
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
-    });
-
-  } catch (err) {
-    console.error('❌ MongoDB connection error:', err);
-  }
+  await client.connect();
+  db = client.db('shivanya');
+  console.log('✅ Connected to MongoDB Atlas');
 }
-
-connectDB();
 
 // Signup route (unchanged)
 app.post('/signup', async (req, res) => {
@@ -638,3 +626,11 @@ app.get('/settings/model/:name', async (req, res) => {
 //     res.sendFile(path.join(buildPath, 'index.html'));
 //   });
 // }
+
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`✅ Backend server running on http://localhost:${PORT}`);
+  });
+}).catch((err) => {
+  console.error('❌ Failed to connect to MongoDB, server not started.', err);
+});
