@@ -1,47 +1,44 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
-import { MongoClient, ObjectId } from 'mongodb';
-import dotenv from 'dotenv';
-dotenv.config();
+  import express from 'express';
+  import bodyParser from 'body-parser';
+  import cors from 'cors';
+  import { MongoClient, ObjectId } from 'mongodb';
 
-const app = express();
-const PORT = 5000;
+  const app = express();
+  const PORT = 5000;
 
-const uri = process.env.MONGO_URI;
-console.log(uri)
-const client = new MongoClient(uri);
-let db;
+  const uri = "mongodb+srv://shivanya:shivanya@cluster0.jmo3kn5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  const client = new MongoClient(uri);
+  let db;
 
-app.use(cors());
-app.use(bodyParser.json());
+  app.use(cors());
+  app.use(bodyParser.json());
 
-async function connectDB() {
-  try {
-    await client.connect();
-    db = client.db('shivanya'); // your DB name
-    console.log('Connected to MongoDB Atlas');
-  } catch (err) {
-    console.error('MongoDB connection error:', err);
+  async function connectDB() {
+    try {
+      await client.connect();
+      db = client.db('shivanya'); // your DB name
+      console.log('Connected to MongoDB Atlas');
+    } catch (err) {
+      console.error('MongoDB connection error:', err);
+    }
   }
-}
 
-connectDB();
+  connectDB();
 
-// Signup route (unchanged)
-app.post('/signup', async (req, res) => {
-  try {
-    const { username, password, isAdmin = false } = req.body;
-    const users = db.collection('users');
-    const existing = await users.findOne({ username });
-    if (existing) return res.status(400).json({ success: false, error: 'User already exists' });
+  // Signup route (unchanged)
+  app.post('/signup', async (req, res) => {
+    try {
+      const { username, password, isAdmin = false } = req.body;
+      const users = db.collection('users');
+      const existing = await users.findOne({ username });
+      if (existing) return res.status(400).json({ success: false, error: 'User already exists' });
 
-    await users.insertOne({ username, password, isAdmin }); // TODO: hash passwords in production
-    res.json({ success: true });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+      await users.insertOne({ username, password, isAdmin }); // TODO: hash passwords in production
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  });
 
 // Login route (unchanged)
 app.post('/login', async (req, res) => {
